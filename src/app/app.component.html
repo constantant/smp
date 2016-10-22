@@ -1,3 +1,7 @@
-<h1>
-  {{title}}
-</h1>
+<app-header [menu]="menu" (onSwitchMenuItem)="onSwitchMenuItem($event)"></app-header>
+
+<div [ngSwitch]="currentMenuItem.rout">
+    <app-page-post-list *ngSwitchCase="'posts'" [list]="postList"></app-page-post-list>
+    <app-page-report-list *ngSwitchCase="'reports'" [list]="reportList"></app-page-report-list>
+    <app-page-settings *ngSwitchCase="'settings'"></app-page-settings>
+</div>
