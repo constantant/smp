@@ -1,0 +1,19 @@
+:host{
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    overflow: hidden;
+    font-family: Arial, 'sans-serif';
+}
+
+.app-body {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.no-scroll {
+    overflow: hidden;
+}

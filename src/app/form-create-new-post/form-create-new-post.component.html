@@ -1,0 +1,13 @@
+<form #form="ngForm" (ngSubmit)="onSubmit(form.value)">
+    <div>
+        <label>Date: </label>
+        <input ngModel="" name="date" type="date" />
+    </div>
+    <div>
+        <label>Comment: </label>
+        <textarea ngModel="" name="comment"></textarea>
+    </div>
+    <div>
+        <button>create new post</button>
+    </div>
+</form>

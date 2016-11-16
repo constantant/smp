@@ -1,7 +1,7 @@
-<app-header [menu]="menu" (onSwitchMenuItem)="onSwitchMenuItem($event)"></app-header>
-
-<div [ngSwitch]="currentMenuItem.rout">
-    <app-page-post-list *ngSwitchCase="'posts'" [list]="postList"></app-page-post-list>
-    <app-page-report-list *ngSwitchCase="'reports'" [list]="reportList"></app-page-report-list>
-    <app-page-settings *ngSwitchCase="'settings'"></app-page-settings>
+<app-header></app-header>
+<div class="app-body" [class.no-scroll]="isShown()">
+    <router-outlet></router-outlet>
+    <app-modal-window *ngIf="modelWindowService.showModalCreateNewForm" (close)="onClose($event)">
+        <app-form-create-new-post></app-form-create-new-post>
+    </app-modal-window>
 </div>

@@ -1,4 +1,8 @@
 import {Component, OnInit, Input} from '@angular/core';
+import {DataService} from "../service/data.service";
+import {URLSearchParams} from "@angular/http";
+import {environment} from '../../environments/environment';
+import {ModelWindowService} from "../service/model-window.service";
 
 @Component({
     selector: 'app-page-post-list',
@@ -7,13 +11,44 @@ import {Component, OnInit, Input} from '@angular/core';
 })
 export class PagePostListComponent implements OnInit {
 
-    @Input()
-    public list: IMenuItem[];
+    public list: IPostItem[];
 
-    constructor() {
+    public count: number;
+
+    constructor(
+        private _dataService: DataService,
+        public modelWindowService: ModelWindowService
+    ) {
+    }
+
+    public onCreateNewPost(){
+        this.modelWindowService.showModalCreateNewForm = true;
     }
 
     ngOnInit() {
+        this._dataService
+            .getPostsByHash(environment.smp.tagPost)
+            .subscribe(({response:{items, count}}) => {
+                this.count = count;
+                this.list = items.map(({id, created_by, date, geo, text, attachments}) => {
+                    return {
+                        id,
+                        created_by,
+                        date: new Date(date*1000),
+                        geo,
+                        text,
+                        images: attachments ? attachments
+                            .filter(({type}) => type === 'photo')
+                            .map(({photo: {photo_75, photo_130, photo_604}}) => {
+                                return {
+                                    photo_75,
+                                    photo_130,
+                                    photo_604
+                                }
+                            }) : []
+                    }
+                });
+            });
     }
 
 }

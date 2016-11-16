@@ -1,6 +1,22 @@
-<img [src]="data.image" src=""/>
-<p>
+<div>{{data.date | date : 'd MMMM y HH:mm'}}</div>
+<div class="images">
+    <img *ngFor="let image of data.images" [src]="image.photo_130" src=""/>
+</div>
+<div>
     {{data.text}}
-</p>
-<button>Add report</button>
-<button>To favorite</button>
+</div>
+<div>
+    <a href="javascript:;">{{data?.geo?.place?.title}}</a>
+</div>
+<!--<sebm-google-map
+        *ngIf="data.geo"
+        [latitude]="lat"
+        [longitude]="lng"
+        [zoom]="16"
+        [scrollwheel]="false"
+        [streetViewControl]="false"
+>
+    <sebm-google-map-marker [latitude]="lat" [longitude]="lng"></sebm-google-map-marker>
+</sebm-google-map>-->
+<button (click)="addReport()">Add report</button>
+<button (click)="toFavorite()">To favorite</button>

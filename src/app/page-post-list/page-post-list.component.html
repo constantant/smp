@@ -1,4 +1,4 @@
-<button>create new post</button>
+<button (click)="onCreateNewPost()">create new post</button>
 <label>
     <input type="checkbox">
     <span>Favorite</span>
@@ -8,4 +8,6 @@
     <span>My post</span>
 </label>
 <app-search></app-search>
-<app-page-post-item *ngFor="let item of list" [data]="item"></app-page-post-item>
+<div class="list">
+    <app-page-post-item *ngFor="let item of list" [data]="item"></app-page-post-item>
+</div>

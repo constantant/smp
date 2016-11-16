@@ -1,4 +1,6 @@
 import {Component, OnInit, Input} from '@angular/core';
+import {DataService} from "../service/data.service";
+import {environment} from '../../environments/environment';
 
 @Component({
     selector: 'app-page-report-list',
@@ -7,13 +9,33 @@ import {Component, OnInit, Input} from '@angular/core';
 })
 export class PageReportListComponent implements OnInit {
 
-    @Input()
-    public list: IMenuItem[];
+    public list: IReportItem[];
 
-    constructor() {
+    public count: number;
+
+    constructor(private _dataService: DataService) {
     }
 
     ngOnInit() {
+        this._dataService
+            .getPostsByHash(environment.smp.tagReport)
+            .subscribe(({response:{items, count}}) => {
+                this.count = count;
+                this.list = items.map(({text, attachments}) => {
+                    return {
+                        text,
+                        images: attachments ? attachments
+                            .filter(({type}) => type === 'photo')
+                            .map(({photo: {photo_75, photo_130, photo_604}}) => {
+                                return {
+                                    photo_75,
+                                    photo_130,
+                                    photo_604
+                                }
+                            }) : []
+                    }
+                });
+            });
     }
 
 }

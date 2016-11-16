@@ -7,20 +7,11 @@ import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 })
 export class MenuComponent implements OnInit {
 
-    @Input()
-    public menu: IMenuItem[];
-
-    @Output()
-    public onSelectItem: EventEmitter<IMenuItem> = new EventEmitter();
-
     constructor() {
     }
 
     ngOnInit() {
     }
 
-    public onClick(item: IMenuItem) {
-        this.onSelectItem.emit(item);
-    }
 
 }

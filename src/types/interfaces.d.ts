@@ -1,15 +1,40 @@
+interface IUserInfo {
+    id: number
+    first_name: string
+    last_name: string
+    photo_50: string
+}
 
-interface IMenuItem {
+interface IPlace {
+    city: string,
+    country: string,
+    created: string,
+    icon: string,
+    id: number,
+    latitude: number,
+    longitude: number,
     title: string
-    rout: string
+}
+
+interface IGeo {
+    coordinates: string,
+    place: IPlace
 }
 
 interface IPostItem {
-    text: string,
-    image: string
+    id: number,
+    created_by: number,
+    date: number,
+    text?: string,
+    geo?: IGeo,
+    images?: string[]
 }
 
 interface IReportItem {
-    text: string,
-    images: string[]
+    id: number,
+    created_by: number,
+    date: number,
+    text?: string,
+    geo?: IGeo,
+    images?: string[]
 }

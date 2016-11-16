@@ -1,0 +1,12 @@
+:host {
+    position: relative;
+    overflow: hidden;
+    width: 100px;
+    flex-shrink: 0;
+    text-align: center;
+}
+
+.header {
+    position: relative;
+    background-color: #fff;
+}

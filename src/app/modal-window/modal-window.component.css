@@ -1,0 +1,59 @@
+:host {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.modal-window-wrapper,
+.modal-window-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.modal-window-layer {
+    background-color: #000;
+    opacity: 0.3;
+}
+
+.modal-window-wrapper {
+    overflow: auto;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.modal-window-wrapper::before {
+    content: ' ';
+    font-size: 0;
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+.modal-window-content {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    white-space: normal;
+    padding: 20px;
+    background-color: #fff;
+    text-align: left;
+    box-shadow: #333 0 0 20px;
+}
+
+.modal-window-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: #aaa;
+    display: block;
+    text-decoration: none;
+    line-height: 20px;
+    height: 20px;
+    width: 20px;
+    text-align: center;
+}

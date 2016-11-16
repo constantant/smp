@@ -1,0 +1,10 @@
+.user{
+    position: relative;
+    margin-bottom: 20px;
+}
+.user h4{
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
