@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {URLSearchParams, Headers, Http, Jsonp} from "@angular/http";
-import {OAuthService} from 'angular2-oauth2/oauth-service';
 import {environment} from '../../environments/environment';
 import {Observable} from "rxjs/Observable";
 import {Observer} from "rxjs/Observer";
@@ -9,72 +8,87 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class DataService {
 
-    constructor(private _oAuthService: OAuthService,
-                private _http: Http,
+    private _VK: IVK;
+
+    private _status: IVKStatus;
+
+    constructor(private _http: Http,
                 private _jsonp: Jsonp) {
-        this._oAuthService.loginUrl = environment.oauth.loginUrl;
-        this._oAuthService.logoutUrl = environment.oauth.logoutUrl;
-        this._oAuthService.redirectUri = environment.oauth.redirectUri;
-        this._oAuthService.clientId = environment.oauth.clientId;
-        this._oAuthService.scope = environment.oauth.scope;
-        this._oAuthService.issuer = environment.oauth.issue;
-        this._oAuthService.setStorage(localStorage);
-        this._oAuthService.oidc = environment.oauth.oidc;
-        this._oAuthService.tryLogin({});
+        this._VK = VK;
+        this._VK.init({
+            apiId: environment.vk.apiId
+        });
+
+        this.getStatus()
+            .subscribe(status => {
+                this._status = status;
+                console.log(status);
+            });
     }
 
     public login() {
-        this._oAuthService.initImplicitFlow();
+        this._VK.Auth.login(
+            () => {
+                console.log('login Ok');
+            },
+            environment.vk.scope
+        );
     }
 
     public logout() {
-        this._oAuthService.logOut();
+        this._VK.Auth.logout(
+            () => {
+                console.log('logout Ok');
+            }
+        );
     }
 
     public isLogin(): boolean {
-        let hasIdToken = this._oAuthService.hasValidIdToken();
-        let hasAccessToken = this._oAuthService.hasValidAccessToken();
-        return (hasIdToken && hasAccessToken);
+        return this._status && this._status.status === 'connected';
     }
 
-    public apiRequest(method: string, params?: URLSearchParams): Observable<any> {
-        let url: string = `${environment.apiUri}${method}`,
-            search = new URLSearchParams();
+    public getStatus(): Observable<IVKStatus> {
+        return Observable.create((observer: Observer<IVKStatus>) => {
+            this._VK.Auth.getLoginStatus(status => {
+                observer.next(status);
+            });
+        });
+    }
 
-        if (params) {
-            search.appendAll(params);
-        }
-        search.set('access_token', this._oAuthService.getAccessToken());
-        search.set('v', environment.apiVersion);
-        search.set('extended', '1');
-        search.set('callback', 'JSONP_CALLBACK');
-
+    public apiRequest(method: string, params?: Object): Observable<any> {
         return new Observable((observer: Observer<any>) => {
-            this._jsonp
-                .get(url, {search})
-                .map(response => response.json())
-                .subscribe(data => observer.next(data));
+            this._VK.Api.call(method, Object.assign(params, {v: environment.vk.apiVersion}), data => {
+                observer.next(data);
+            });
         });
     }
 
     public getPostsByHash(hash_tag: string): Observable<any> {
-        let params = new URLSearchParams();
-
-        //params.set('owner_id', '-' + environment.apiOwnerId);
-        params.set('q', '#' + hash_tag);
-        params.set('count', '' + environment.smp.count);
-
-        return this.apiRequest('newsfeed.search', params);
+        return this.apiRequest('wall.search', {
+            owner_id: '-' + environment.smp.ownerId,
+            query: '#' + hash_tag,
+            count: '' + environment.smp.count
+        });
     }
 
     public getUserInfo(ids?: number[]): Observable<any> {
-        let params = new URLSearchParams();
+        let params = {
+            fields: 'photo_50'
+        };
 
         if (ids) {
-            params.set('user_ids', ids.join(','));
+            params['user_ids'] = ids.join(',');
         }
-        params.set('fields', 'photo_50');
 
         return this.apiRequest('users.get', params);
+    }
+
+    public createPost(message) {
+        let params = {
+            owner_id: '-' + environment.smp.ownerId,
+            message: message
+        };
+
+        return this.apiRequest('wall.post', params);
     }
 }

@@ -1,10 +1,9 @@
 import {environment} from '../environments/environment';
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpModule, JsonpModule} from '@angular/http';
 import {RouterModule} from '@angular/router';
-import {OAuthService} from 'angular2-oauth2/oauth-service';
 
 import {AgmCoreModule} from 'angular2-google-maps/core';
 
@@ -45,6 +44,7 @@ import { FormCreateNewPostComponent } from './form-create-new-post/form-create-n
     imports: [
         BrowserModule,
         FormsModule,
+        ReactiveFormsModule,
         HttpModule,
         JsonpModule,
         AgmCoreModule.forRoot({
@@ -54,8 +54,7 @@ import { FormCreateNewPostComponent } from './form-create-new-post/form-create-n
     ],
     providers: [
         DataService,
-        ModelWindowService,
-        OAuthService
+        ModelWindowService
     ],
     bootstrap: [AppComponent]
 })
