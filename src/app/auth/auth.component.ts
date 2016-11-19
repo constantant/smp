@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, NgZone} from '@angular/core';
 import {DataService} from '../service';
 import {URLSearchParams} from "@angular/http";
 
@@ -11,11 +11,14 @@ export class AuthComponent implements OnInit {
 
     public userData: IUserInfo;
 
-    constructor(private _dataService: DataService) {
+    constructor(private _dataService: DataService,
+                private _zone: NgZone) {
         this._dataService
             .getUserInfo()
             .subscribe(data => {
-                this.userData = data.response[0];
+                this._zone.run(() => {
+                    this.userData = data.response[0];
+                });
             });
     }
 

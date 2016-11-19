@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input, NgZone} from '@angular/core';
 import {DataService} from "../service/data.service";
 import {environment} from '../../environments/environment';
 
@@ -13,29 +13,36 @@ export class PageReportListComponent implements OnInit {
 
     public count: number;
 
-    constructor(private _dataService: DataService) {
+    constructor(private _dataService: DataService,
+                private _zone: NgZone) {
+    }
+
+    public isLogin(){
+        return this._dataService.isLogin();
     }
 
     ngOnInit() {
         this._dataService
             .getPostsByHash(environment.smp.tagReport)
             .subscribe(({response:{items, count}}) => {
-                this.count = count;
-                this.list = items.map(({text, attachments}) => {
-                    return {
-                        text,
-                        images: attachments ? attachments
-                            .filter(({type}) => type === 'photo')
-                            .map(({photo: {photo_75, photo_130, photo_604}}) => {
-                                return {
-                                    photo_75,
-                                    photo_130,
-                                    photo_604
-                                }
-                            }) : []
-                    }
+                this._zone.run(() => {
+                    this.count = count;
+                    this.list = items.map(({text, attachments}) => {
+                        return {
+                            text,
+                            images: attachments ? attachments
+                                .filter(({type}) => type === 'photo')
+                                .map(({photo: {photo_75, photo_130, photo_604}}) => {
+                                    return {
+                                        photo_75,
+                                        photo_130,
+                                        photo_604
+                                    }
+                                }) : []
+                        }
+                    });
                 });
+
             });
     }
-
 }

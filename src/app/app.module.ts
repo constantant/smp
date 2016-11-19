@@ -23,6 +23,7 @@ import {IndexComponent} from './index/index.component';
 import {NopageComponent} from './nopage/nopage.component';
 import {ModalWindowComponent} from './modal-window/modal-window.component';
 import { FormCreateNewPostComponent } from './form-create-new-post/form-create-new-post.component';
+import { TopBarComponent } from './top-bar/top-bar.component';
 
 @NgModule({
     declarations: [
@@ -39,7 +40,8 @@ import { FormCreateNewPostComponent } from './form-create-new-post/form-create-n
         IndexComponent,
         NopageComponent,
         ModalWindowComponent,
-        FormCreateNewPostComponent
+        FormCreateNewPostComponent,
+        TopBarComponent
     ],
     imports: [
         BrowserModule,

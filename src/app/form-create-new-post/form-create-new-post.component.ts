@@ -23,9 +23,9 @@ export class FormCreateNewPostComponent implements OnInit {
     public onSubmit(value) {
         console.log(value);
 
-        /*this._dataService
+        this._dataService
          .createPost(value.comment)
-         .subscribe(response=>console.log(response));*/
+         .subscribe(response=>console.log(response));
     }
 
     ngOnInit() {

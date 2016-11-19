@@ -45,14 +45,14 @@ interface IVKAuth {
     login: (callback: () => void, settings: number) => void;
     logout: (callback: () => void) => void;
     revokeGrants: (callback: () => void) => void;
-    getLoginStatus: (callback: (status: IVKStatus) => void) => void;
+    getLoginStatus: (callback?: (status: IVKStatus) => void) => void;
     getSession: () => void
 }
 interface IVKApi {
     call: (apiMethodName: string, paramsObject: Object, successCallBack: (data: { response: Array<any> }) => void) => void;
 }
 interface IVKObserver {
-    subscribe: (event: string, handler: () => void) => void;
+    subscribe: (event: string, handler: (results: Object) => void) => void;
     unsubscribe: (event: string, handler: () => void) => void;
 }
 interface IVKUI {

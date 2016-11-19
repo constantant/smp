@@ -1,13 +1,18 @@
-<button (click)="onCreateNewPost()">create new post</button>
-<label>
-    <input type="checkbox">
-    <span>Favorite</span>
-</label>
-<label>
-    <input type="checkbox">
-    <span>My post</span>
-</label>
-<app-search></app-search>
+<app-top-bar>
+    <div *ngIf="isLogin()">
+        <button (click)="onCreateNewPost()">create new post</button>
+        <label>
+            <input type="checkbox">
+            <span>Favorite</span>
+        </label>
+        <label>
+            <input type="checkbox">
+            <span>My post</span>
+        </label>
+    </div>
+    <app-search></app-search>
+</app-top-bar>
+
 <div class="list">
     <app-page-post-item *ngFor="let item of list" [data]="item"></app-page-post-item>
 </div>

@@ -11,7 +11,7 @@
 
 .app-body {
     flex-grow: 1;
-    overflow-y: auto;
+    overflow:hidden;
 }
 
 .no-scroll {
