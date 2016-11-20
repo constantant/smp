@@ -11,7 +11,7 @@ export class List implements OnInit {
     public count: number;
 
     constructor(protected _dataService: DataService,
-                private _zone: NgZone,
+                protected _zone: NgZone,
                 public modelWindowService: ModelWindowService) {
 
     }
