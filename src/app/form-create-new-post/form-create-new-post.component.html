@@ -4,6 +4,15 @@
         <input name="date" type="date" formControlName="date"/>
     </div>
     <div>
+        <input type="file"
+               multiple="true"
+               name="files"
+               formControlName="files"
+               ngFileSelect
+               [options]="options"
+               (onUpload)="handleMultipleUpload($event)" />
+    </div>
+    <div>
         <label>Comment: </label>
         <textarea name="comment" formControlName="comment"></textarea>
     </div>

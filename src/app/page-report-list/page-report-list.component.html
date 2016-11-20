@@ -6,15 +6,14 @@
         </label>
         <label>
             <input type="checkbox">
-            <span>With me</span>
+            <span>My reports</span>
         </label>
         <label>
             <input type="checkbox">
-            <span>My reports</span>
+            <span>Report with me</span>
         </label>
     </div>
     <app-search></app-search>
 </app-top-bar>
-<div class="list">
-    <app-page-report-item *ngFor="let item of list" [data]="item"></app-page-report-item>
-</div>
+
+<app-list [list]="list" [count]="count"></app-list>

@@ -7,17 +7,15 @@ import {PageReportListComponent} from './page-report-list/page-report-list.compo
 export const appRoutes: Routes = [
     {
         path: '',
-        component: IndexComponent,
-        children: [
-            {
-                path: '',
-                component: PagePostListComponent,
-            },
-            {
-                path: 'reports',
-                component: PageReportListComponent,
-            }
-        ]
+        component: IndexComponent
+    },
+    {
+        path: 'posts',
+        component: PagePostListComponent,
+    },
+    {
+        path: 'reports',
+        component: PageReportListComponent,
     },
     {
         path: 'access_token',

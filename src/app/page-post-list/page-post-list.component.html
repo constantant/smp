@@ -13,6 +13,4 @@
     <app-search></app-search>
 </app-top-bar>
 
-<div class="list">
-    <app-page-post-item *ngFor="let item of list" [data]="item"></app-page-post-item>
-</div>
+<app-list [list]="list" [count]="count"></app-list>

@@ -60,10 +60,18 @@ export class DataService {
         return subject;
     }
 
-    public getPostsByHash(hash_tag: string): Observable<any> {
-        return this.apiRequest('wall.search', {
+    public getAll(): Observable<any> {
+        return this.apiRequest('wall.get', {
             owner_id: '-' + environment.smp.ownerId,
-            query: '#' + hash_tag,
+            count: '' + environment.smp.count
+        });
+    }
+
+    public getPostsByHash(hash_tag: string): Observable<any> {
+        return this.apiRequest('newsfeed.search', {
+            //owner_id: '-' + environment.smp.ownerId,
+            //query: '#' + hash_tag,
+            q: '#' + hash_tag,
             count: '' + environment.smp.count
         });
     }
@@ -80,20 +88,28 @@ export class DataService {
         return this.apiRequest('users.get', params);
     }
 
-    public createPost(message) {
-        let params = {
-            owner_id: '-' + environment.smp.ownerId,
-            message: message
-        };
+    public createPost(message: string, date: string) {
+        let session = this._VK.Auth.getSession(),
+            params = {
+                //owner_id: session['mid'],
+                owner_id: '-' + environment.smp.ownerId,
+                //from_group: 1,
+                //signed: 1,
+                message: DataService.tplMessage(message, date)
+            };
 
         return this.apiRequest('wall.post', params);
     }
 
-    private _checkLogin(){
+    private _checkLogin() {
         this._VK.Auth.getLoginStatus((results) => {
             this._zone.run(() => {
                 this._status = results['status'];
             });
         });
+    }
+
+    static tplMessage(message: string, date: string) {
+        return `When: ${date}\nAbout: ${message}\n#${environment.smp.tagPost}`;
     }
 }

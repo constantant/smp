@@ -10,7 +10,7 @@ export const environment = {
     vk: {
         apiVersion: '5.60',
         apiId: 4022476,
-        scope: 8192
+        scope: 8196
     },
     googleMapsKey: 'AIzaSyCO8eX3MDiI1EaqnH_0vaDbXet74ss7TDI'
 };

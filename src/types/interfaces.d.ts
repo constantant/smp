@@ -46,7 +46,7 @@ interface IVKAuth {
     logout: (callback: () => void) => void;
     revokeGrants: (callback: () => void) => void;
     getLoginStatus: (callback?: (status: IVKStatus) => void) => void;
-    getSession: () => void
+    getSession: () => Object
 }
 interface IVKApi {
     call: (apiMethodName: string, paramsObject: Object, successCallBack: (data: { response: Array<any> }) => void) => void;

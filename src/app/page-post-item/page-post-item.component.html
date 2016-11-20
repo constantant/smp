@@ -2,9 +2,7 @@
 <div class="images">
     <img *ngFor="let image of data.images" [src]="image.photo_130" src=""/>
 </div>
-<div>
-    {{data.text}}
-</div>
+<div [innerHtml]="data.text"></div>
 <div>
     <a href="javascript:;">{{data?.geo?.place?.title}}</a>
 </div>

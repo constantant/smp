@@ -4,6 +4,7 @@ import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpModule, JsonpModule} from '@angular/http';
 import {RouterModule} from '@angular/router';
+import {UPLOAD_DIRECTIVES} from 'ng2-uploader';
 
 import {AgmCoreModule} from 'angular2-google-maps/core';
 
@@ -22,8 +23,9 @@ import {appRoutes} from './app.routes';
 import {IndexComponent} from './index/index.component';
 import {NopageComponent} from './nopage/nopage.component';
 import {ModalWindowComponent} from './modal-window/modal-window.component';
-import { FormCreateNewPostComponent } from './form-create-new-post/form-create-new-post.component';
-import { TopBarComponent } from './top-bar/top-bar.component';
+import {FormCreateNewPostComponent} from './form-create-new-post/form-create-new-post.component';
+import {TopBarComponent} from './top-bar/top-bar.component';
+import { ListComponent } from './list/list.component';
 
 @NgModule({
     declarations: [
@@ -41,7 +43,9 @@ import { TopBarComponent } from './top-bar/top-bar.component';
         NopageComponent,
         ModalWindowComponent,
         FormCreateNewPostComponent,
-        TopBarComponent
+        TopBarComponent,
+        UPLOAD_DIRECTIVES,
+        ListComponent
     ],
     imports: [
         BrowserModule,
