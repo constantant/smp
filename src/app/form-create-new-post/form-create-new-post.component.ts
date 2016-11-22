@@ -3,6 +3,7 @@ import {DataService} from "../service/data.service";
 import {FormControl, FormGroup, FormBuilder} from '@angular/forms';
 import 'rxjs/add/operator/debounce';
 import {ModelWindowService} from "../service/model-window.service";
+import {Router} from "@angular/router";
 
 @Component({
     selector: 'app-form-create-new-post',
@@ -20,6 +21,7 @@ export class FormCreateNewPostComponent implements OnInit {
 
     constructor(private _dataService: DataService,
                 private _fb: FormBuilder,
+                private _router: Router,
                 private _zone: NgZone,
                 public modelWindowService: ModelWindowService) {
         this.form = _fb.group({
@@ -49,6 +51,7 @@ export class FormCreateNewPostComponent implements OnInit {
             .subscribe(response => {
                 this._zone.run(() => {
                     this.modelWindowService.showModalCreateNewForm = false;
+                    this._router.navigateByUrl('/');
                 });
             });
     }

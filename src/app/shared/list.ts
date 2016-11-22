@@ -35,14 +35,15 @@ export class List implements OnInit {
                     this.list = items.map(({id, created_by, date, geo, text, attachments}) => {
                         let isPost = rePost.test(text),
                             isReport = reReport.test(text),
-                            _text = '';
+                            _eventDate = Date.parse(text.replace(/^When:\s(\d{4}-\d{2}-\d{2})(\s(.*))+/, '$1')),
+                            _text = text.replace(/^(.*)\sAbout:\s(.*)/, '$2');
 
                         if (isPost) {
-                            _text = text.replace(rePost, '');
+                            _text = _text.replace(rePost, '');
                         }
 
                         if (isReport) {
-                            _text = text.replace(reReport, '');
+                            _text = _text.replace(reReport, '');
                         }
 
                         _text = _text.replace('\n', '<br/>');
@@ -53,6 +54,7 @@ export class List implements OnInit {
                             id,
                             created_by,
                             date: new Date(date * 1000),
+                            dateEvent: isNaN(_eventDate) ? false : _eventDate.toString(),
                             geo,
                             text: _text,
                             images: attachments ? attachments

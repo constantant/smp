@@ -25,6 +25,7 @@ interface IPostItem {
     id: number,
     created_by: number,
     date: number,
+    dateEvent: number,
     text?: string,
     geo?: IGeo,
     images?: string[]

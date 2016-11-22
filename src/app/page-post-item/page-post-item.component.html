@@ -1,4 +1,4 @@
-<div>{{data.date | date : 'd MMMM y HH:mm'}}</div>
+<div *ngIf="data.dateEvent">{{data.dateEvent | date : 'd MMMM y'}}</div>
 <div class="images">
     <img *ngFor="let image of data.images" [src]="image.photo_130" src=""/>
 </div>
