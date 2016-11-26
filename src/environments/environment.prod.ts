@@ -7,6 +7,9 @@ export const environment = {
         tagReport: 'spymepleasereport',
         getTagReportByModel: model_vk_id => `hey_${model_vk_id}_look_at_self`
     },
+    db:{
+        name: 'spymeplease'
+    },
     vk: {
         apiVersion: '5.60',
         apiId: 4022476,

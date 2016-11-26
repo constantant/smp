@@ -5,6 +5,7 @@ import {Observable} from "rxjs/Observable";
 import {Subject} from 'rxjs/Subject';
 import {Observer} from "rxjs/Observer";
 import 'rxjs/add/operator/map';
+import {IndexedDB} from "./indexed-db.service";
 
 @Injectable()
 export class DataService {
@@ -14,8 +15,10 @@ export class DataService {
     private _status: string;
 
     constructor(private _zone: NgZone,
+                private _db: IndexedDB,
                 private _http: Http,
                 private _jsonp: Jsonp) {
+
         this._VK = VK;
         this._VK.init({
             apiId: environment.vk.apiId
@@ -49,6 +52,20 @@ export class DataService {
         let subject = new Subject<any>(),
             requestParams = Object.assign((params || {}), {v: environment.vk.apiVersion}),
             callback = data => subject.next(data);
+
+        /*this._db
+            .addData(
+                environment.db.store,
+                {
+                    ssn:'123-23-323-3232',
+                    type:'eeeee'
+                }
+            )
+            .subscribe(data => console.log(data));
+
+        this._db
+            .getDataAll(environment.db.store)
+            .subscribe(data => console.log('data: ', data));*/
 
         if (this._status !== 'loaded') {
             this._VK.Auth.getLoginStatus(() => {

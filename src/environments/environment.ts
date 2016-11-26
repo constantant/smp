@@ -12,6 +12,19 @@ export const environment = {
         tagReport: 'spymepleasereport',
         getTagReportByModel: model_vk_id => `hey_${model_vk_id}_look_at_self`
     },
+    db: {
+        name: 'spymeplease',
+        store: 'list',
+        version: 1,
+        createMethod: (db: IDBDatabase) => {
+            let store: IDBObjectStore = db.createObjectStore(
+                environment.db.store,
+                {keyPath: 'ssn'}
+            );
+
+            store.createIndex('type', 'type', {unique: false})
+        }
+    },
     vk: {
         apiVersion: '5.60',
         apiId: 4022476,
