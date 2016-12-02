@@ -1,7 +1,8 @@
 import {Component, NgZone} from '@angular/core';
 import {List} from "../shared";
 import {DataService} from "../service/data.service";
-import {ModelWindowService} from "../service/model-window.service";
+import {ModalWindowService} from "../service/model-window.service";
+import {IndexedDB} from "../service/indexed-db.service";
 
 @Component({
     selector: 'app-index',
@@ -10,8 +11,9 @@ import {ModelWindowService} from "../service/model-window.service";
 })
 export class IndexComponent extends List {
     constructor(protected _dataService: DataService,
+                protected _db: IndexedDB,
                 protected _zone: NgZone,
-                public modelWindowService: ModelWindowService) {
-        super(_dataService, _zone, modelWindowService);
+                public modelWindowService: ModalWindowService) {
+        super(_dataService, _db, _zone, modelWindowService);
     }
 }

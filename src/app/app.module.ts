@@ -18,7 +18,7 @@ import {PageReportListComponent} from './page-report-list/page-report-list.compo
 import {PageReportItemComponent} from './page-report-item/page-report-item.component';
 import {SearchComponent} from './search/search.component';
 import {PageSettingsComponent} from './page-settings/page-settings.component';
-import {DataService, ModelWindowService, IndexedDB} from './service';
+import {DataService, ModalWindowService, IndexedDB} from './service';
 import {appRoutes} from './app.routes';
 import {IndexComponent} from './index/index.component';
 import {NopageComponent} from './nopage/nopage.component';
@@ -61,14 +61,16 @@ import {ListComponent} from './list/list.component';
     providers: [
         {
             provide: IndexedDB,
-            useFactory: () => new IndexedDB(
+            useFactory: (dataService: DataService) => new IndexedDB(
+                dataService,
                 environment.db.name,
                 environment.db.version,
                 environment.db.createMethod
-            )
+            ),
+            deps: [DataService]
         },
         DataService,
-        ModelWindowService
+        ModalWindowService
     ],
     bootstrap: [AppComponent]
 })

@@ -14,15 +14,15 @@ export const environment = {
     },
     db: {
         name: 'spymeplease',
-        store: 'list',
+        storeList: 'list',
+        storeUsers: 'users',
         version: 1,
         createMethod: (db: IDBDatabase) => {
-            let store: IDBObjectStore = db.createObjectStore(
-                environment.db.store,
-                {keyPath: 'ssn'}
-            );
+            let storeList: IDBObjectStore = db.createObjectStore(environment.db.storeList, {keyPath: 'id'}),
+                storeUsers: IDBObjectStore = db.createObjectStore(environment.db.storeUsers, {keyPath: 'id'});
 
-            store.createIndex('type', 'type', {unique: false})
+            storeList.createIndex('type', 'type', {unique: false});
+            storeList.createIndex('from_id', 'from_id', {unique: false});
         }
     },
     vk: {

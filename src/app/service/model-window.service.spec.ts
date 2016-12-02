@@ -1,16 +1,16 @@
 /* tslint:disable:no-unused-variable */
 
 import { TestBed, async, inject } from '@angular/core/testing';
-import { ModelWindowService } from './model-window.service';
+import { ModalWindowService } from './model-window.service';
 
 describe('Service: ModelWindow', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ModelWindowService]
+      providers: [ModalWindowService]
     });
   });
 
-  it('should ...', inject([ModelWindowService], (service: ModelWindowService) => {
+  it('should ...', inject([ModalWindowService], (service: ModalWindowService) => {
     expect(service).toBeTruthy();
   }));
 });

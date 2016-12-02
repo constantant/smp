@@ -2,8 +2,9 @@ import {OnInit, NgZone} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {DataService} from "../service/data.service";
 import {Observable} from 'rxjs/Observable';
-import {ModelWindowService} from "../service/model-window.service";
+import {ModalWindowService} from "../service/model-window.service";
 import {ReplaySubject} from "rxjs/ReplaySubject";
+import {IndexedDB} from "../service/indexed-db.service";
 
 export class List implements OnInit {
 
@@ -12,8 +13,9 @@ export class List implements OnInit {
     public count: number;
 
     constructor(protected _dataService: DataService,
+                protected _db: IndexedDB,
                 protected _zone: NgZone,
-                public modelWindowService: ModelWindowService) {
+                public modelWindowService: ModalWindowService) {
 
     }
 
@@ -44,29 +46,43 @@ export class List implements OnInit {
         });
 
         this.getListObservable()
-            .subscribe(({response:{items, count}}) => {
+            .subscribe(({response:{items, count, profiles}}) => {
                 subjectCount.next(count);
-                subjectItems.next(items.map(({id, created_by, date, geo, text, attachments}) => {
+                profiles.every(({id, first_name, last_name, has_photo, crop_photo:{photo:{photo_75}}}) => {
+                    let user = {
+                        id, first_name, last_name, has_photo, photo_75
+                    };
+                    this._db
+                        .addData(environment.db.storeUsers, user)
+                        .subscribe(data => console.log(data));
+
+                    return user;
+                });
+                subjectItems.next(items.map(({id, from_id, date, geo, text, attachments}) => {
                     let isPost = rePost.test(text),
                         isReport = reReport.test(text),
                         _eventDate = Date.parse(text.replace(/^When:\s(\d{4}-\d{2}-\d{2})(\s(.*))+/, '$1')),
-                        _text = text.replace(/^(.*)\sAbout:\s(.*)/, '$2');
+                        _text = text.replace(/^(.*)\sAbout:\s(.*)/, '$2'),
+                        _type = 'other';
 
                     if (isPost) {
                         _text = _text.replace(rePost, '');
+                        _type = 'post';
                     }
 
                     if (isReport) {
                         _text = _text.replace(reReport, '');
+                        _type = 'report';
                     }
 
                     _text = _text.replace('\n', '<br/>');
 
-                    return {
+                    let item = {
+                        type: _type,
                         isPost: isPost,
                         isReport: isReport,
                         id,
-                        created_by,
+                        from_id,
                         date: new Date(date * 1000),
                         dateEvent: isNaN(_eventDate) ? false : _eventDate.toString(),
                         geo,
@@ -80,7 +96,13 @@ export class List implements OnInit {
                                     photo_604
                                 }
                             }) : []
-                    }
+                    };
+
+                    this._db
+                        .addData(environment.db.storeList, item)
+                        .subscribe(data => console.log(data));
+
+                    return item;
                 }));
             });
     }

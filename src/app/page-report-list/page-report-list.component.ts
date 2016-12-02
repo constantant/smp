@@ -3,7 +3,8 @@ import {environment} from '../../environments/environment';
 import {List} from "../shared";
 import {Observable} from 'rxjs/Observable';
 import {DataService} from "../service/data.service";
-import {ModelWindowService} from "../service/model-window.service";
+import {ModalWindowService} from "../service/model-window.service";
+import {IndexedDB} from "../service/indexed-db.service";
 
 @Component({
     selector: 'app-page-report-list',
@@ -12,9 +13,10 @@ import {ModelWindowService} from "../service/model-window.service";
 })
 export class PageReportListComponent extends List {
     constructor(protected _dataService: DataService,
+                protected _db: IndexedDB,
                 protected _zone: NgZone,
-                public modelWindowService: ModelWindowService) {
-        super(_dataService, _zone, modelWindowService);
+                public modelWindowService: ModalWindowService) {
+        super(_dataService, _db, _zone, modelWindowService);
     }
 
     protected getListObservable(): Observable<any> {

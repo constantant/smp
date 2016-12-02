@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {ModelWindowService} from "./service/model-window.service";
+import {ModalWindowService} from "./service/model-window.service";
 
 @Component({
     selector: 'app-root',
@@ -9,7 +9,7 @@ import {ModelWindowService} from "./service/model-window.service";
 export class AppComponent {
 
     constructor(
-        public modelWindowService: ModelWindowService
+        public modelWindowService: ModalWindowService
     ) {
     }
 

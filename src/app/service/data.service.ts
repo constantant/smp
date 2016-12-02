@@ -27,7 +27,7 @@ export class DataService {
         this._checkLogin();
     }
 
-    public login() {
+    public login(): void {
         this._VK.Auth.login(
             () => {
                 this._checkLogin();
@@ -36,7 +36,7 @@ export class DataService {
         );
     }
 
-    public logout() {
+    public logout(): void {
         this._VK.Auth.logout(
             () => {
                 this._checkLogin();
@@ -53,20 +53,6 @@ export class DataService {
             requestParams = Object.assign((params || {}), {v: environment.vk.apiVersion}),
             callback = data => subject.next(data);
 
-        /*this._db
-            .addData(
-                environment.db.store,
-                {
-                    ssn:'123-23-323-3232',
-                    type:'eeeee'
-                }
-            )
-            .subscribe(data => console.log(data));
-
-        this._db
-            .getDataAll(environment.db.store)
-            .subscribe(data => console.log('data: ', data));*/
-
         if (this._status !== 'loaded') {
             this._VK.Auth.getLoginStatus(() => {
                 this._VK.Api.call(method, requestParams, callback);
@@ -77,10 +63,13 @@ export class DataService {
         return subject;
     }
 
-    public getAll(): Observable<any> {
+    public getAll(offset?: number): Observable<any> {
         return this.apiRequest('wall.get', {
+            offset: offset,
+            extended: 1,
+            fields: 'crop_photo,has_photo',
             owner_id: '-' + environment.smp.ownerId,
-            count: '' + environment.smp.count
+            count: environment.smp.count
         });
     }
 
@@ -118,7 +107,7 @@ export class DataService {
         return this.apiRequest('wall.post', params);
     }
 
-    private _checkLogin() {
+    private _checkLogin(): void {
         this._VK.Auth.getLoginStatus((results) => {
             this._zone.run(() => {
                 this._status = results['status'];

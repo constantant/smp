@@ -2,7 +2,7 @@ import {Component, OnInit, NgZone} from '@angular/core';
 import {DataService} from "../service/data.service";
 import {FormControl, FormGroup, FormBuilder} from '@angular/forms';
 import 'rxjs/add/operator/debounce';
-import {ModelWindowService} from "../service/model-window.service";
+import {ModalWindowService} from "../service/model-window.service";
 import {Router} from "@angular/router";
 
 @Component({
@@ -23,7 +23,7 @@ export class FormCreateNewPostComponent implements OnInit {
                 private _fb: FormBuilder,
                 private _router: Router,
                 private _zone: NgZone,
-                public modelWindowService: ModelWindowService) {
+                public modelWindowService: ModalWindowService) {
         this.form = _fb.group({
             date: [''],
             comment: [''],
