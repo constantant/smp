@@ -3,8 +3,8 @@ import {Injectable} from "@angular/core";
 import {ReplaySubject} from "rxjs/ReplaySubject";
 import {DataService} from "./data.service";
 import {Observable} from "rxjs/Observable";
-import "rxjs/operator/switchMap";
-import "rxjs/observable/from";
+import "rxjs/add/operator/switchMap";
+import "rxjs/add/observable/from";
 
 const indexedDB = window.indexedDB
     || window['mozIndexedDB']
@@ -22,16 +22,16 @@ export class IndexedDB {
                 private _createMethod: (db: IDBDatabase)=>void) {
     }
 
-    /*    public updateDB(): ReplaySubject<any> {
-     let subject = new ReplaySubject<any>();
-     this._dataService
-     .getAll()
-     .switchMap(({response:{items, count, profiles}}) => {
-     return Observable.from([{items, count, profiles}]);
-     })
-     .subscribe();
-     return subject;
-     }*/
+    public updateDB(): ReplaySubject<any> {
+        let subject = new ReplaySubject<any>();
+        this._dataService
+            .getAll()
+            .switchMap(({response:{items, count, profiles}}) => {
+                return Observable.from([{items, count, profiles}]);
+            })
+            .subscribe();
+        return subject;
+    }
 
     public connectDB(): ReplaySubject<any> {
         let subject = new ReplaySubject<any>();

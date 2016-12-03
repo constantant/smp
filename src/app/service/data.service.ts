@@ -14,10 +14,7 @@ export class DataService {
 
     private _status: string;
 
-    constructor(private _zone: NgZone,
-                private _db: IndexedDB,
-                private _http: Http,
-                private _jsonp: Jsonp) {
+    constructor(private _zone: NgZone) {
 
         this._VK = VK;
         this._VK.init({
@@ -65,7 +62,7 @@ export class DataService {
 
     public getAll(offset?: number): Observable<any> {
         return this.apiRequest('wall.get', {
-            offset: offset,
+            offset: offset || 0,
             extended: 1,
             fields: 'crop_photo,has_photo',
             owner_id: '-' + environment.smp.ownerId,
