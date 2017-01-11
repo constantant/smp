@@ -59,16 +59,7 @@ import {ListComponent} from './list/list.component';
         RouterModule.forRoot(appRoutes, {useHash: true})
     ],
     providers: [
-        {
-            provide: IndexedDB,
-            useFactory: (dataService: DataService) => new IndexedDB(
-                dataService,
-                environment.db.name,
-                environment.db.version,
-                environment.db.createMethod
-            ),
-            deps: [DataService]
-        },
+        IndexedDB,
         DataService,
         ModalWindowService
     ],

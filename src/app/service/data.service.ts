@@ -1,11 +1,10 @@
+import {environment} from '../../environments/environment';
 import {Injectable, NgZone} from '@angular/core';
 import {URLSearchParams, Headers, Http, Jsonp} from "@angular/http";
-import {environment} from '../../environments/environment';
 import {Observable} from "rxjs/Observable";
 import {Subject} from 'rxjs/Subject';
 import {Observer} from "rxjs/Observer";
 import 'rxjs/add/operator/map';
-import {IndexedDB} from "./indexed-db.service";
 
 @Injectable()
 export class DataService {
@@ -115,4 +114,9 @@ export class DataService {
     static tplMessage(message: string, date: string) {
         return `When: ${date}\nAbout: ${message}\n#${environment.smp.tagPost}`;
     }
+}
+
+export enum PostType {
+    Post = 1,
+    Report = 2
 }

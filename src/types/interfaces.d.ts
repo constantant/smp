@@ -21,8 +21,13 @@ interface IGeo {
     place: IPlace
 }
 
+interface IPostType {
+
+}
+
 interface IPostItem {
     id: number,
+    type: number,
     created_by: number,
     date: number,
     dateEvent: number,
