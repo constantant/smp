@@ -9,21 +9,13 @@ export const environment = {
         ownerId: 78725629,
         count: 10,
         tagPost: 'spymeplease',
-        tagReport: 'spymepleasereport',
-        getTagReportByModel: model_vk_id => `hey_${model_vk_id}_look_at_self`
+        tagReport: 'spymepleasereport'
     },
     db: {
         name: 'spymeplease',
         storeList: 'list',
         storeUsers: 'users',
-        version: 1,
-        createMethod: (db: IDBDatabase) => {
-            let storeList: IDBObjectStore = db.createObjectStore(environment.db.storeList, {keyPath: 'id'}),
-                storeUsers: IDBObjectStore = db.createObjectStore(environment.db.storeUsers, {keyPath: 'id'});
-
-            storeList.createIndex('type', 'type', {unique: false});
-            storeList.createIndex('from_id', 'from_id', {unique: false});
-        }
+        version: 1
     },
     vk: {
         apiVersion: '5.60',

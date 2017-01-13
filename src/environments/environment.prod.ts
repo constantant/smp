@@ -4,8 +4,7 @@ export const environment = {
         ownerId: 78725629,
         count: 10,
         tagPost: 'spymeplease',
-        tagReport: 'spymepleasereport',
-        getTagReportByModel: model_vk_id => `hey_${model_vk_id}_look_at_self`
+        tagReport: 'spymepleasereport'
     },
     db:{
         name: 'spymeplease'
