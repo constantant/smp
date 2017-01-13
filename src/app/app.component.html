@@ -1,7 +1,3 @@
-<app-header></app-header>
-<div class="app-body" [class.no-scroll]="isShown()">
-    <router-outlet></router-outlet>
-    <app-modal-window *ngIf="modelWindowService.showModalCreateNewForm" (close)="onClose($event)">
-        <app-form-create-new-post></app-form-create-new-post>
-    </app-modal-window>
-</div>
+<h1>
+  {{title}}
+</h1>
