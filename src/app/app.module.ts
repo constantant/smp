@@ -6,10 +6,12 @@ import { HttpModule } from '@angular/http';
 import { VkService, PostService } from './services';
 
 import { AppComponent } from './app.component';
+import { AuthComponent } from './auth/auth.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    AuthComponent
   ],
   imports: [
     BrowserModule,

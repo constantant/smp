@@ -8,6 +8,8 @@ export class VkService {
 
   public loaded: EventEmitter<IVK> = new EventEmitter<IVK>();
 
+  public status: EventEmitter<string> = new EventEmitter<string>();
+
   private _sdk: IVK;
 
   private _status: string;
@@ -70,7 +72,9 @@ export class VkService {
     this._checkLoaded((vk: IVK) => {
       vk.Auth.getLoginStatus((res: any) => {
         this._ngZone.run(() => {
-          this._status = res[ 'status' ];
+          this.status.emit(
+            this._status = res[ 'status' ]
+          );
           callback && callback(res);
         });
       });
