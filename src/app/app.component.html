@@ -1,9 +1,11 @@
 <aside>
   <nav>
-    <a class="home">Home</a>
+    <a [routerLink]="['']">Home</a>
+    <a [routerLink]="['requests']">Requests</a>
+    <a [routerLink]="['reports']">Reports</a>
   </nav>
   <app-auth></app-auth>
 </aside>
 <section>
-  section
+  <router-outlet></router-outlet>
 </section>

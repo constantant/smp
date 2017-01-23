@@ -14,5 +14,6 @@ aside {
 }
 
 section {
+  position: relative;
   flex-grow: 1;
 }
