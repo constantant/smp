@@ -1,8 +1,18 @@
 <aside>
   <nav>
-    <a [routerLink]="['']">Home</a>
-    <a [routerLink]="['requests']">Requests</a>
-    <a [routerLink]="['reports']">Reports</a>
+    <a
+      [routerLink]="['']"
+      [routerLinkActive]="currentClass"
+      [routerLinkActiveOptions]="{exact: true}"
+    >Home</a>
+    <a
+      [routerLink]="['requests']"
+      [routerLinkActive]="currentClass"
+    >Requests</a>
+    <a
+      [routerLink]="['reports']"
+      [routerLinkActive]="currentClass"
+    >Reports</a>
   </nav>
   <app-auth></app-auth>
 </aside>
