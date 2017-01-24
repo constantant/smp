@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { SectionIndexComponent } from './section-index.component';
+import { SnippetReportComponent } from './snippet-report.component';
 
-describe('SectionIndexComponent', () => {
-  let component: SectionIndexComponent;
-  let fixture: ComponentFixture<SectionIndexComponent>;
+describe('SnippetReportComponent', () => {
+  let component: SnippetReportComponent;
+  let fixture: ComponentFixture<SnippetReportComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SectionIndexComponent ]
+      declarations: [ SnippetReportComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SectionIndexComponent);
+    fixture = TestBed.createComponent(SnippetReportComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

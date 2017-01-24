@@ -1,21 +1,29 @@
 import { Routes } from "@angular/router";
-import { SectionIndexComponent } from "../section-index/section-index.component";
-import { SectionRequestsComponent } from "../section-requests/section-requests.component";
-import { SectionReportsComponent } from "../section-reports/section-reports.component";
 import { SectionNopageComponent } from "../section-nopage/section-nopage.component";
+import { SectionPostsComponent } from "../section-posts/section-posts.component";
 
 export const rootRoutes: Routes = [
   {
     path: '',
-    component: SectionIndexComponent
+    component: SectionPostsComponent,
+    data: {
+      showRequests: true,
+      showReports: true
+    }
   },
   {
     path: 'requests',
-    component: SectionRequestsComponent,
+    component: SectionPostsComponent,
+    data: {
+      showRequests: true
+    }
   },
   {
     path: 'reports',
-    component: SectionReportsComponent,
+    component: SectionPostsComponent,
+    data: {
+      showReports: true
+    }
   },
   {
     path: 'access_token',

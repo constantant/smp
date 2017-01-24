@@ -1,10 +1,29 @@
-app-section-index,
-app-section-requests,
-app-section-reports,
+app-section-posts,
 app-section-nopage {
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.filter,
+.post-list {
+  padding: 0.5rem;
+}
+
+.filter {
+  flex-shrink: 0;
+}
+
+.post-list {
+  position: relative;
+  overflow: auto;
+  flex-grow: 1;
+}
+
+.post-item {
+  position: relative;
 }

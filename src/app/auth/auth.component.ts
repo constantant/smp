@@ -10,7 +10,7 @@ export class AuthComponent implements OnInit {
 
   public isLogin: boolean = false;
 
-  constructor(private _vkService: VkService) {
+  public constructor(private _vkService: VkService) {
     _vkService
       .status
       .subscribe(() => {
@@ -26,7 +26,7 @@ export class AuthComponent implements OnInit {
     this._vkService.login();
   }
 
-  ngOnInit() {
+  public ngOnInit() {
   }
 
 }

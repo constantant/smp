@@ -8,20 +8,20 @@ import { rootRoutes } from './routers';
 
 import { AppComponent } from './app.component';
 import { AuthComponent } from './auth/auth.component';
-import { SectionIndexComponent } from './section-index/section-index.component';
-import { SectionRequestsComponent } from './section-requests/section-requests.component';
-import { SectionReportsComponent } from './section-reports/section-reports.component';
 import { SectionNopageComponent } from './section-nopage/section-nopage.component';
 import { RouterModule } from "@angular/router";
+import { SectionPostsComponent } from './section-posts/section-posts.component';
+import { SnippetRequestComponent } from './section-posts/snippet-request/snippet-request.component';
+import { SnippetReportComponent } from './section-posts/snippet-report/snippet-report.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AuthComponent,
-    SectionIndexComponent,
-    SectionRequestsComponent,
-    SectionReportsComponent,
-    SectionNopageComponent
+    SectionNopageComponent,
+    SectionPostsComponent,
+    SnippetRequestComponent,
+    SnippetReportComponent
   ],
   imports: [
     RouterModule.forRoot(rootRoutes, { useHash: true }),

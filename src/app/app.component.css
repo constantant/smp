@@ -12,6 +12,7 @@
 aside {
   flex-shrink: 0;
   text-align: center;
+  user-select: none;
 }
 
 nav {
