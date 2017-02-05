@@ -4,8 +4,8 @@
   </div>
 </form>
 <div class="post-list">
-  <div class="post-item">
-    123
+  <div class="post-item" *ngFor="let post of list">
+    <div [innerHTML]="post.text"></div>
   </div>
 </div>
 

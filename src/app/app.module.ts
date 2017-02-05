@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
-import { VkService, PostService } from './services';
+import { VkService, PostService, DbService, UserService } from './services';
 import { rootRoutes } from './routers';
 
 import { AppComponent } from './app.component';
@@ -31,6 +31,8 @@ import { SnippetReportComponent } from './section-posts/snippet-report/snippet-r
   ],
   providers: [
     VkService,
+    UserService,
+    DbService,
     PostService
   ],
   bootstrap: [ AppComponent ]

@@ -1,2 +1,8 @@
-<button *ngIf="isLogin" (click)="loguot()">Logout</button>
+<div *ngIf="isLogin" class="user-info">
+  <img
+    [src]="userInfo?.photo_50"
+    alt="{{userInfo?.first_name}} {{userInfo?.last_name}}"
+  />
+  <button (click)="loguot()">Logout</button>
+</div>
 <button *ngIf="!isLogin" (click)="login()">Login</button>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { VkService } from "../services/vk.service";
+import { UserService } from "../services/user.service";
 
 @Component({
   selector: 'app-auth',
@@ -10,15 +11,28 @@ export class AuthComponent implements OnInit {
 
   public isLogin: boolean = false;
 
-  public constructor(private _vkService: VkService) {
+  public userInfo: IVKUser;
+
+  public constructor(private _vkService: VkService,
+                     private _userService: UserService) {
     _vkService
       .status
       .subscribe(() => {
         this.isLogin = _vkService.isLogin();
       });
+
+    _userService
+      .userInfo
+      .subscribe((info: IVKUser) => {
+        this.userInfo = info;
+      });
   }
 
   public loguot() {
+    if (!confirm('Are you sure?')) {
+      return;
+    }
+
     this._vkService.logout();
   }
 

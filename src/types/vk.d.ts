@@ -29,4 +29,75 @@ interface IVKStatus {
   status: string
 }
 
+interface IVKResponseUsers {
+  response: IVKUser[]
+}
+
+interface IVKUser {
+  id: number,
+  first_name: string,
+  last_name: string,
+  photo_50?: string
+}
+
+interface IVKResponseGroups {
+  response: IVKGroup[]
+}
+
+interface IVKGroup {
+  description?: string,
+  id: number,
+  is_closed: 0 | 1,
+  name: string,
+  photo_50: string,
+  photo_100: string,
+  photo_200: string,
+  screen_name: string,
+  status?: string,
+  type: string
+}
+
+interface IVKResponseWall {
+  response: IVKResponseWallData
+}
+
+interface IVKResponseWallData {
+  count?: number,
+  groups?: any[],
+  items?: IVKPost[],
+  profiles?: any[]
+}
+
+interface IVKPost {
+  can_delete: 0 | 1,
+  comments: IVKCommentsInfo,
+  date: number,
+  from_id: number,
+  id: number,
+  likes: IVKLikesInfo,
+  marked_as_ads: 0 | 1,
+  owner_id: number,
+  post_source: { type: string },
+  post_type: string,
+  reposts: IVKRepostsInfo,
+  text: string
+}
+
+interface IVKRepostsInfo {
+  user_reposted: number,
+  count: number
+}
+
+interface IVKLikesInfo {
+  can_like: 0 | 1,
+  can_publish: 0 | 1,
+  count: number,
+  user_likes: number
+}
+
+interface IVKCommentsInfo {
+  can_post: 0 | 1,
+  count: number
+}
+
 declare var VK: IVK;

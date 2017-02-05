@@ -27,6 +27,25 @@ export class VkService {
     })
   }
 
+  public getUserInfo(): Observable<IVKResponseUsers> {
+    return this.request(
+      'users.get',
+      {
+        fields: 'photo_50'
+      }
+    );
+  }
+
+  public getSmpInfo(): Observable<IVKResponseGroups> {
+    return this.request(
+      'groups.getById',
+      {
+        group_id: environment.smp.ownerId,
+        fields: 'description,status'
+      }
+    );
+  }
+
   public request(method: string, params?: Object): Observable<any> {
     let subject = new Subject<any>(),
       requestParams = Object.assign((params || {}), { v: environment.vk.apiVersion }),

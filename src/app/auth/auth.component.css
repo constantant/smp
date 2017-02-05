@@ -1,0 +1,14 @@
+:host {
+  position: relative;
+  display: block;
+}
+
+.user-info {
+  display: block;
+}
+
+.user-info img {
+  display: block;
+  margin: 0 auto;
+  width: 50px;
+}
