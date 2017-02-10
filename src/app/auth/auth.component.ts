@@ -41,6 +41,7 @@ export class AuthComponent implements OnInit {
   }
 
   public ngOnInit() {
+    this._vkService.getLoginStatus();
   }
 
 }

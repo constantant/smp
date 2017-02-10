@@ -56,8 +56,10 @@ export class VkService {
       };
 
     if (this._status !== 'loaded') {
-      this.getLoginStatus(() => {
-        this._sdk.Api.call(method, requestParams, callback);
+      this._checkLoaded((vk: IVK) => {
+        vk.Auth.getLoginStatus(() => {
+          this._sdk.Api.call(method, requestParams, callback);
+        });
       });
       return subject;
     }
