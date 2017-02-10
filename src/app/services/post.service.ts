@@ -16,15 +16,20 @@ export class PostService {
                      private _dbService: DbService) {
   }
 
-  public getList(type?: number) {
+  public getList(type?: number, timestamp?: number, options?: any): Subject<IPostItem[]> {
     let subject: Subject<IPostItem[]> = new Subject();
     this
-      ._getPostsFromDB(Date.now(), type)
+      ._getPostsFromDB(timestamp || Date.now(), type, options)
       .switchMap((data: IPostItem[]) => {
         if (!data.length) {
-          return this._addNewListToDB()
-            .switchMap(() => {
-              return this.getList(type);
+          return this
+            ._addNewListToDB()
+            .switchMap((added: number[]) => {
+              if (!added.length) {
+                subject.next([]);
+              }
+
+              return this.getList(type, timestamp);
             });
         }
 
@@ -45,25 +50,77 @@ export class PostService {
         () => db.posts.count()
       ))
       .switchMap((count: number) => this._pullData(count))
-      .switchMap((data: IVKResponseWall) => Observable.fromPromise(
-        db.transaction(
-          'rw',
-          db.posts,
-          () => Dexie.Promise
-            .all(data.response.items.map(
-              ({ id, text, date, from_id }) => {
-                let info = PostService._getPostInfoByText(text);
-                return db.posts.add({
-                  id,
-                  type: info.type,
-                  timestamp: date * 1000,
-                  from_id,
-                  text: info.text
-                })
-              }
+      .switchMap((data: IVKResponseWall) => {
+          if (!data.response.items) {
+            return Observable.of([]);
+          }
+
+          return Observable.fromPromise(
+            db.transaction(
+              'rw',
+              db.posts,
+              () => this._insertToDB(data.response.items)
             ))
-        ))
+        }
       );
+  }
+
+  private _insertToDB(items: IVKPost[]): Dexie.Promise<number[]> {
+    let db = this._dbService;
+    return Dexie.Promise
+      .all(items.map(
+        (post: IVKPost) => {
+          let { id, text, date, from_id, attachments } = post,
+            info = PostService._getPostInfoByText(text);
+          return db.posts.add({
+            id,
+            type: info.type,
+            timestamp: date * 1000,
+            from_id,
+            text: info.text,
+            attachments
+          })
+        }
+      ))
+  }
+
+  private _getPostsFromDB(timestamp: number, type?: number, options?: any) {
+    let db = this._dbService;
+    return Observable.fromPromise(
+      db.transaction(
+        'r',
+        db.posts,
+        () => db.posts
+          .where('timestamp')
+          .below(timestamp)
+          .and((value: IPostItem) => {
+            let typeIsAccess = type ? value.type === type : true,
+              textIsAccess = true;
+            if (options) {
+              if (options.text) {
+                textIsAccess = (new RegExp(`${options.text}`, 'i')).test(value.text);
+              }
+            }
+            return typeIsAccess && textIsAccess;
+          })
+          .limit(environment.db.limit)
+          .reverse()
+          .sortBy('timestamp')
+      )
+    );
+  }
+
+  private _pullData(offset?: number, count?: number): Observable<IVKResponseWall> {
+    return this._vkService.request(
+      'wall.get',
+      {
+        offset: offset || 0,
+        extended: 1,
+        fields: 'crop_photo,has_photo',
+        owner_id: '-' + environment.smp.ownerId,
+        count: count || environment.smp.count
+      }
+    );
   }
 
   private static _getPostInfoByText(text) {
@@ -92,36 +149,6 @@ export class PostService {
       text: _text,
       eventDate: _eventDate
     };
-  }
-
-  private _getPostsFromDB(timestamp: number, type?: number) {
-    let db = this._dbService;
-    return Observable.fromPromise(
-      db.transaction(
-        'r',
-        db.posts,
-        () => db.posts
-          .where('timestamp')
-          .below(timestamp)
-          .and((value: IPostItem) => type ? value.type === type : true)
-          .limit(environment.db.limit)
-          .reverse()
-          .sortBy('timestamp')
-      )
-    );
-  }
-
-  private _pullData(offset?: number, count?: number): Observable<IVKResponseWall> {
-    return this._vkService.request(
-      'wall.get',
-      {
-        offset: offset || 0,
-        extended: 1,
-        fields: 'crop_photo,has_photo',
-        owner_id: '-' + environment.smp.ownerId,
-        count: count || environment.smp.count
-      }
-    );
   }
 
 }

@@ -1,3 +1,7 @@
-<p>
-  snippet-report works!
-</p>
+<div>
+  <img
+    *ngFor="let attach of data.attachments"
+    [src]="attach.photo.photo_130"
+  />
+</div>
+<p [innerHTML]="data.text"></p>

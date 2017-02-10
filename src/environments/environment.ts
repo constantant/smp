@@ -9,7 +9,7 @@ export const environment = {
     sdk: '//vk.com/js/api/openapi.js',
     apiVersion: '5.62',
     apiId: 4022476,
-    scope: 8196
+    scope: 1
   },
   smp: {
     ownerId: 78725629,

@@ -1,11 +1,22 @@
 <form class="filter">
-  <div class="filter-query">
-    <input type="text" placeholder="tape your query..." />
+  <div class="filter-query" [formGroup]="form">
+    <input
+      type="text"
+      placeholder="tape your query..."
+      formControlName="filter"
+    />
   </div>
 </form>
 <div class="post-list">
   <div class="post-item" *ngFor="let post of list">
-    <div [innerHTML]="post.text"></div>
+    <app-snippet-request
+      *ngIf="post.type === EPostType.Request"
+      [data]="post"
+    ></app-snippet-request>
+    <app-snippet-report
+      *ngIf="post.type === EPostType.Report"
+      [data]="post"
+    ></app-snippet-report>
   </div>
 </div>
 

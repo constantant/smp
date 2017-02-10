@@ -1,5 +1,6 @@
 <div *ngIf="isLogin" class="user-info">
   <img
+    *ngIf="userInfo"
     [src]="userInfo?.photo_50"
     alt="{{userInfo?.first_name}} {{userInfo?.last_name}}"
   />

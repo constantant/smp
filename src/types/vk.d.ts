@@ -69,6 +69,7 @@ interface IVKResponseWallData {
 }
 
 interface IVKPost {
+  attachments: IVKAttachment[],
   can_delete: 0 | 1,
   comments: IVKCommentsInfo,
   date: number,
@@ -81,6 +82,29 @@ interface IVKPost {
   post_type: string,
   reposts: IVKRepostsInfo,
   text: string
+}
+
+interface IVKAttachment {
+  type: 'photo' | 'video' | 'audio' | 'doc' | 'graffiti' | 'link' | 'note' | 'app' | 'poll' | 'page' | 'album' | 'photos_list' | 'market' | 'market_album' | 'sticker',
+  photo?: IVKAttachmentPhoto
+}
+
+interface IVKAttachmentPhoto {
+  access_key: string,
+  album_id: number,
+  date: number,
+  height: number,
+  id: number,
+  owner_id: number,
+  photo_75: string,
+  photo_130: string,
+  photo_604?: string,
+  photo_807?: string,
+  photo_1280?: string,
+  post_id: number,
+  text: string,
+  user_id: number,
+  width: number
 }
 
 interface IVKRepostsInfo {

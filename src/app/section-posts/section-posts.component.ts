@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
 import { PostService, EPostType } from "../services/post.service";
+import { FormBuilder, FormGroup } from "@angular/forms";
+import "rxjs/add/operator/debounceTime";
 
 @Component({
   selector: 'app-section-posts',
@@ -13,18 +15,40 @@ export class SectionPostsComponent implements OnInit {
 
   public showReports: boolean;
 
+  public form: FormGroup;
+
   public list: IPostItem[];
 
+  public EPostType = EPostType;
+
   public constructor(private _activatedRoute: ActivatedRoute,
+                     private _fb: FormBuilder,
                      private _postService: PostService) {
     _activatedRoute.data
       .subscribe(({ showRequests = false, showReports = false }) => {
         this.showRequests = showRequests;
         this.showReports = showReports;
+      });
+
+    this.form = _fb.group({
+      filter: [ '' ]
+    });
+
+    this.form.controls[ 'filter' ]
+      .valueChanges
+      .debounceTime(200)
+      .subscribe((value: string) => {
+        this.updateList({
+          text: value
+        });
       })
   }
 
   public ngOnInit() {
+    this.updateList();
+  }
+
+  updateList(options?: any) {
     let type;
 
     if (this.showRequests && !this.showReports) {
@@ -37,7 +61,7 @@ export class SectionPostsComponent implements OnInit {
 
     this
       ._postService
-      .getList(type)
+      .getList(type, null, options)
       .subscribe((list: IPostItem[]) => {
         this.list = list;
       });

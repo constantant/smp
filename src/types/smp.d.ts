@@ -3,7 +3,8 @@ interface IPostItem {
   type: number,
   timestamp: number,
   from_id: number,
-  text: string
+  text: string,
+  attachments: IVKAttachment[]
 }
 
 interface IGeo {
