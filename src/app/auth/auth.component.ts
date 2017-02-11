@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { VkService } from "../services/vk.service";
 import { UserService } from "../services/user.service";
+import { Observable } from "rxjs";
 
 @Component({
   selector: 'app-auth',
@@ -17,8 +18,13 @@ export class AuthComponent implements OnInit {
                      private _userService: UserService) {
     _vkService
       .status
-      .subscribe(() => {
-        this.isLogin = _vkService.isLogin();
+      .switchMap(() => Observable.of(
+        this.isLogin = _vkService.isLogin()
+      ))
+      .subscribe((isLogin: boolean) => {
+        if (isLogin && !this.userInfo) {
+          _userService.pullUserInfo();
+        }
       });
 
     _userService
@@ -34,6 +40,7 @@ export class AuthComponent implements OnInit {
     }
 
     this._vkService.logout();
+    this.userInfo = null;
   }
 
   public login() {

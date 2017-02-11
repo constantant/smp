@@ -8,7 +8,10 @@ export class UserService {
   public userInfo: ReplaySubject<IVKUser> = new ReplaySubject<IVKUser>();
 
   constructor(private _vkService: VkService) {
-    _vkService
+  }
+
+  pullUserInfo() {
+    this._vkService
       .getUserInfo()
       .subscribe(({ response }) => {
         this.userInfo.next(response[ 0 ]);

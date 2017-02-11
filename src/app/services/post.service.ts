@@ -26,10 +26,10 @@ export class PostService {
             ._addNewListToDB()
             .switchMap((added: number[]) => {
               if (!added.length) {
-                subject.next([]);
+                return Observable.of([]);
               }
 
-              return this.getList(type, timestamp);
+              return this.getList(type, timestamp, options);
             });
         }
 
@@ -47,7 +47,7 @@ export class PostService {
       db.transaction(
         'r',
         db.posts,
-        () => db.posts.count()
+        () => db.posts.count() //todo count must be saved!
       ))
       .switchMap((count: number) => this._pullData(count))
       .switchMap((data: IVKResponseWall) => {
@@ -72,7 +72,7 @@ export class PostService {
         (post: IVKPost) => {
           let { id, text, date, from_id, attachments } = post,
             info = PostService._getPostInfoByText(text);
-          return db.posts.add({
+          return this._dbAdd(db, {
             id,
             type: info.type,
             timestamp: date * 1000,
@@ -82,6 +82,24 @@ export class PostService {
           })
         }
       ))
+  }
+
+  private _dbAdd(db: DbService, data: IPostItem): Dexie.Promise<number> {
+    return new Dexie.Promise((resolve, reject) => {
+      db.posts.add(data)
+        .then(
+          resolve,
+          (err: Dexie.DexieError) => {
+            if (err.inner.code !== 0) {
+              reject(err);
+            }
+
+            db.posts.update(data.id, data)
+              .then(() => {
+              }, reject)
+          }
+        );
+    });
   }
 
   private _getPostsFromDB(timestamp: number, type?: number, options?: any) {
