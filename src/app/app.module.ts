@@ -1,9 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
-import { VkService, PostService, DbService, UserService } from './services';
+import { VkService, PostService, DbService, UserService, AppService } from './services';
 import { rootRoutes } from './routers';
 
 import { AppComponent } from './app.component';
@@ -34,6 +34,7 @@ import { SnippetReportComponent } from './section-posts/snippet-report/snippet-r
     VkService,
     UserService,
     DbService,
+    AppService,
     PostService
   ],
   bootstrap: [ AppComponent ]

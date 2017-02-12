@@ -1,6 +1,7 @@
 :host {
   position: relative;
   display: block;
+  margin-bottom: 20px;
 }
 
 .user-info {

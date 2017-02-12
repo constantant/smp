@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
 import { PostService, EPostType } from "../services/post.service";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import "rxjs/add/operator/debounceTime";
+import { AppService } from "../services/app.service";
 
 @Component({
   selector: 'app-section-posts',
@@ -23,9 +24,20 @@ export class SectionPostsComponent implements OnInit {
 
   public EPostType = EPostType;
 
+  @ViewChild('elementList')
+  public elementList: ElementRef;
+
+  private _scrollTop: number = 0;
+
   public constructor(private _activatedRoute: ActivatedRoute,
                      private _fb: FormBuilder,
+                     private _appService: AppService,
                      private _postService: PostService) {
+
+    _appService.onGoToTop
+      .subscribe(() => {
+        this.scrollToTop();
+      });
 
     _postService.onNewPosts
       .subscribe((ids: number[]) => {
@@ -83,6 +95,23 @@ export class SectionPostsComponent implements OnInit {
       .subscribe((list: IPostItem[]) => {
         this.list = list;
       });
+  }
+
+  onScroll() {
+    let top = this.elementList.nativeElement.scrollTop;
+
+    if (top === 0) {
+      return;
+    }
+
+    this._scrollTop = top;
+  }
+
+  scrollToTop() {
+    let list = this.elementList.nativeElement,
+      top = list.scrollTop;
+
+    list.scrollTop = top === 0 ? this._scrollTop : 0;
   }
 
 }
