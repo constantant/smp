@@ -15,6 +15,8 @@ export class SectionPostsComponent implements OnInit {
 
   public showReports: boolean;
 
+  public numberOfNewPosts: number = 0;
+
   public form: FormGroup;
 
   public list: IPostItem[];
@@ -24,6 +26,17 @@ export class SectionPostsComponent implements OnInit {
   public constructor(private _activatedRoute: ActivatedRoute,
                      private _fb: FormBuilder,
                      private _postService: PostService) {
+
+    _postService.onNewPosts
+      .subscribe((ids: number[]) => {
+        if (!(this.list && this.list.length)) {
+          this.updateList();
+          return;
+        }
+
+        this.numberOfNewPosts += ids.length;
+      });
+
     _activatedRoute.data
       .subscribe(({ showRequests = false, showReports = false }) => {
         this.showRequests = showRequests;
@@ -45,6 +58,11 @@ export class SectionPostsComponent implements OnInit {
   }
 
   public ngOnInit() {
+    this.updateList();
+  }
+
+  showNewPosts() {
+    this.numberOfNewPosts = 0;
     this.updateList();
   }
 

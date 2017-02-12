@@ -15,7 +15,8 @@ export const environment = {
     ownerId: 78725629,
     count: 20,
     tagPost: 'spymeplease',
-    tagReport: 'spymepleasereport'
+    tagReport: 'spymepleasereport',
+    pingDuration: 6000
   },
   db: {
     name: 'spymeplease',

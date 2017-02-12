@@ -1,0 +1,5 @@
+.button-show-new {
+  display: block;
+  overflow: hidden;
+  flex-shrink: 0;
+}

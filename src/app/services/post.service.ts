@@ -1,9 +1,8 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { VkService } from "./vk.service";
 import { DbService } from "./db.service";
 import Dexie from "dexie";
 import { Observable } from "rxjs/Observable";
-import { Subject } from "rxjs/Subject";
 import "rxjs/add/observable/fromPromise";
 import "rxjs/add/observable/of";
 import "rxjs/add/operator/switchMap";
@@ -12,57 +11,62 @@ import { environment } from "../../environments/environment";
 @Injectable()
 export class PostService {
 
+  public onNewPosts: EventEmitter<number[]> = new EventEmitter();
+
   public constructor(private _vkService: VkService,
                      private _dbService: DbService) {
+    this._checkNewPosts();
   }
 
-  public getList(type?: number, timestamp?: number, options?: any): Subject<IPostItem[]> {
-    let subject: Subject<IPostItem[]> = new Subject();
-    this
-      ._getPostsFromDB(timestamp || Date.now(), type, options)
-      .switchMap((data: IPostItem[]) => {
-        if (!data.length) {
-          return this
-            ._addNewListToDB()
-            .switchMap((added: number[]) => {
-              if (!added.length) {
-                return Observable.of([]);
-              }
-
-              return this.getList(type, timestamp, options);
-            });
-        }
-
-        return Observable.of(data);
-      })
-      .subscribe((data: IPostItem[]) => {
-        subject.next(data);
-      });
-    return subject;
+  public getList(type?: number, timestamp?: number, options?: any): Observable<IPostItem[]> {
+    return this._getPostsFromDB(timestamp || Date.now(), type, options);
   }
 
-  private _addNewListToDB(): Observable<number[]> {
-    let db = this._dbService;
-    return Observable.fromPromise(
-      db.transaction(
-        'r',
-        db.posts,
-        () => db.posts.count() //todo count must be saved!
-      ))
-      .switchMap((count: number) => this._pullData(count))
-      .switchMap((data: IVKResponseWall) => {
-          if (!data.response.items) {
-            return Observable.of([]);
-          }
-
-          return Observable.fromPromise(
+  public checkNewPosts(offset?: number, count?: number): Observable<any> {
+    let db = this._dbService,
+      observable = Observable
+        .combineLatest(
+          this._pullData(offset, count),
+          Observable.fromPromise(
             db.transaction(
-              'rw',
+              'r',
               db.posts,
-              () => this._insertToDB(data.response.items)
+              () => db.posts
+                .limit(environment.db.limit)
+                .reverse()
+                .sortBy('timestamp')
             ))
-        }
-      );
+        );
+    observable.subscribe(([ { response:{ items } }, dbItems ]) => {
+      this._addToDBAfterCompare(items, dbItems, offset, count);
+    });
+    return observable;
+  }
+
+  private _addToDBAfterCompare(items: IVKPost[], dbItems: IPostItem[], offset?: number, count?: number) {
+    let toAdd: IVKPost[] = [], k = 0;
+    for (let i = 0; i < items.length; i++) {
+      let item: IVKPost = items[ i ],
+        dbItem: IPostItem = dbItems[ k ];
+
+      if (dbItem && item.id === dbItem.id) {
+        //todo maybe should update the post
+        k++;
+        continue;
+      }
+
+      toAdd.push(item);
+    }
+
+    this._insertToDB(toAdd).then(
+      (ids: number[]) => {
+        this.onNewPosts.emit(ids);
+      }
+    );
+
+    if (k === 0) {
+      this.checkNewPosts(offset, count);
+    }
   }
 
   private _insertToDB(items: IVKPost[]): Dexie.Promise<number[]> {
@@ -102,7 +106,7 @@ export class PostService {
     });
   }
 
-  private _getPostsFromDB(timestamp: number, type?: number, options?: any) {
+  private _getPostsFromDB(timestamp: number, type?: number, options?: any): Observable<IPostItem[]> {
     let db = this._dbService;
     return Observable.fromPromise(
       db.transaction(
@@ -139,6 +143,15 @@ export class PostService {
         count: count || environment.smp.count
       }
     );
+  }
+
+  private _checkNewPosts() {
+    this.checkNewPosts()
+      .subscribe(() => {
+        setTimeout(() => {
+          this._checkNewPosts();
+        }, environment.smp.pingDuration);
+      });
   }
 
   private static _getPostInfoByText(text) {
