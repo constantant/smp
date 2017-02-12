@@ -7,17 +7,24 @@
     />
   </div>
 </form>
-<button *ngIf="numberOfNewPosts" (click)="showNewPosts()" class="button-show-new">new posts ({{numberOfNewPosts}})</button>
+<button *ngIf="numberOfNewPosts" (click)="showNewPosts()" class="button-show-new">
+  new posts ({{numberOfNewPosts}})
+</button>
 <div #elementList (scroll)="onScroll($event)" class="post-list">
-  <div class="post-item" *ngFor="let post of list">
-    <app-snippet-request
-      *ngIf="post.type === EPostType.Request"
-      [data]="post"
-    ></app-snippet-request>
-    <app-snippet-report
-      *ngIf="post.type === EPostType.Report"
-      [data]="post"
-    ></app-snippet-report>
+  <div #wrapper class="post-wrapper">
+    <div *ngIf="!list.length">
+      No results...
+    </div>
+    <div class="post-item" *ngFor="let post of list">
+      <app-snippet-request
+        *ngIf="post.type === EPostType.Request"
+        [data]="post"
+      ></app-snippet-request>
+      <app-snippet-report
+        *ngIf="post.type === EPostType.Report"
+        [data]="post"
+      ></app-snippet-report>
+    </div>
   </div>
 </div>
 

@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
 import { PostService, EPostType } from "../services/post.service";
 import { FormBuilder, FormGroup } from "@angular/forms";
+import { Subject } from "rxjs/Subject";
 import "rxjs/add/operator/debounceTime";
 import { AppService } from "../services/app.service";
 
@@ -20,14 +21,21 @@ export class SectionPostsComponent implements OnInit {
 
   public form: FormGroup;
 
-  public list: IPostItem[];
+  public list: IPostItem[] = [];
 
   public EPostType = EPostType;
 
   @ViewChild('elementList')
   public elementList: ElementRef;
 
+  @ViewChild('wrapper')
+  public wrapper: ElementRef;
+
+  private _options: any = {};
+
   private _scrollTop: number = 0;
+
+  private _scrollSubject: Subject<Event> = new Subject();
 
   public constructor(private _activatedRoute: ActivatedRoute,
                      private _fb: FormBuilder,
@@ -42,7 +50,7 @@ export class SectionPostsComponent implements OnInit {
     _postService.onNewPosts
       .subscribe((ids: number[]) => {
         if (!(this.list && this.list.length)) {
-          this.updateList();
+          this.updateList(this._options);
           return;
         }
 
@@ -63,22 +71,42 @@ export class SectionPostsComponent implements OnInit {
       .valueChanges
       .debounceTime(200)
       .subscribe((value: string) => {
-        this.updateList({
-          text: value
-        });
-      })
+        this._options.text = value;
+        this.updateList(this._options);
+      });
+
+    this._scrollSubject
+      .debounceTime(100)
+      .subscribe((event: Event) => {
+        let element = this.elementList.nativeElement,
+          wrapper = this.wrapper.nativeElement,
+          elementRect = element.getBoundingClientRect(),
+          wrapperRect = wrapper.getBoundingClientRect(),
+          top = element.scrollTop;
+
+        if (top === 0) {
+          return;
+        }
+
+        this._scrollTop = top;
+
+        if (top + elementRect.height === wrapperRect.height) {
+          let lastIndex = this.list.length - 1;
+          this.updateList(this._options, this.list[ lastIndex ].timestamp, true);
+        }
+      });
   }
 
   public ngOnInit() {
-    this.updateList();
+    this.updateList(this._options);
   }
 
   showNewPosts() {
     this.numberOfNewPosts = 0;
-    this.updateList();
+    this.updateList(this._options);
   }
 
-  updateList(options?: any) {
+  updateList(options?: any, timestamp?: number, pages?: boolean) {
     let type;
 
     if (this.showRequests && !this.showReports) {
@@ -91,20 +119,20 @@ export class SectionPostsComponent implements OnInit {
 
     this
       ._postService
-      .getList(type, null, options)
+      .getList(type, timestamp, options)
       .subscribe((list: IPostItem[]) => {
+        if (pages) {
+          if (list && list.length) {
+            this.list.push(...list);
+          }
+          return;
+        }
         this.list = list;
       });
   }
 
-  onScroll() {
-    let top = this.elementList.nativeElement.scrollTop;
-
-    if (top === 0) {
-      return;
-    }
-
-    this._scrollTop = top;
+  onScroll(event: Event) {
+    this._scrollSubject.next(event);
   }
 
   scrollToTop() {

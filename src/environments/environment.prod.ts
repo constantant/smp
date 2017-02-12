@@ -11,7 +11,7 @@ export const environment = {
     count: 20,
     tagPost: 'spymeplease',
     tagReport: 'spymepleasereport',
-    pingDuration: 6000
+    pingDuration: 12000
   },
   db: {
     name: 'spymeplease',

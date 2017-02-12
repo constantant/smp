@@ -19,7 +19,26 @@ export class PostService {
   }
 
   public getList(type?: number, timestamp?: number, options?: any): Observable<IPostItem[]> {
-    return this._getPostsFromDB(timestamp || Date.now(), type, options);
+    return this._getPostsFromDB(timestamp || Date.now(), type, options)
+      .switchMap((items: IPostItem[]) => {
+        if (!items.length) {
+          return Observable
+            .fromPromise(this._dbService.posts.count())
+            .switchMap((count: number) => this._pullData(count))
+            .switchMap(({ response: { items } }) => Observable.of(items))
+            .switchMap((items: IVKPost[]) => Observable
+              .fromPromise(this._insertToDB(items)))
+            .switchMap((ids: number[]) => {
+              if (!ids.length) {
+                return Observable.of([]);
+              }
+
+              return this.getList(type, timestamp, options)
+            });
+        }
+
+        return Observable.of(items);
+      });
   }
 
   public checkNewPosts(offset?: number, count?: number): Observable<any> {
@@ -37,7 +56,7 @@ export class PostService {
                 .sortBy('timestamp')
             ))
         );
-    observable.subscribe(([ { response:{ items } }, dbItems ]) => {
+    observable.subscribe(([ { response: { items } }, dbItems ]) => {
       this._addToDBAfterCompare(items, dbItems, offset, count);
     });
     return observable;
