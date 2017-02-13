@@ -90,7 +90,7 @@ export class SectionPostsComponent implements OnInit {
 
         this._scrollTop = top;
 
-        if (top + elementRect.height === wrapperRect.height) {
+        if (Math.floor(top + elementRect.height) === Math.floor(+wrapperRect.height)) {
           let lastIndex = this.list.length - 1;
           this.updateList(this._options, this.list[ lastIndex ].timestamp, true);
         }
