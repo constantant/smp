@@ -12,10 +12,7 @@
 </button>
 <div #elementList (scroll)="onScroll($event)" class="post-list">
   <div #wrapper class="post-wrapper">
-    <div *ngIf="!list.length">
-      No results...
-    </div>
-    <div class="post-item" *ngFor="let post of list">
+    <div class="post-item" *ngFor="let post of list; trackBy: trackByPost">
       <app-snippet-request
         *ngIf="post.type === EPostType.Request"
         [data]="post"
@@ -24,6 +21,9 @@
         *ngIf="post.type === EPostType.Report"
         [data]="post"
       ></app-snippet-report>
+    </div>
+    <div *ngIf="!list.length">
+      No results...
     </div>
   </div>
 </div>

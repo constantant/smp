@@ -174,7 +174,7 @@ export class PostService {
   }
 
   private static _getPostInfoByText(text) {
-    let reRequest = new RegExp(`#${environment.smp.tagPost}$`),
+    let reRequest = new RegExp(`#${environment.smp.tagRequest}$`),
       reReport = new RegExp(`#${environment.smp.tagReport}$`),
       isRequest = reRequest.test(text),
       isReport = reReport.test(text),

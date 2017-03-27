@@ -142,4 +142,8 @@ export class SectionPostsComponent implements OnInit {
     list.scrollTop = top === 0 ? this._scrollTop : 0;
   }
 
+  trackByPost(index: number, hero: IPostItem): number {
+    return hero.id;
+  }
+
 }

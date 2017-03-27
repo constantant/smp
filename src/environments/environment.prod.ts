@@ -9,7 +9,7 @@ export const environment = {
   smp: {
     ownerId: 78725629,
     count: 20,
-    tagPost: 'spymeplease',
+    tagRequest: 'spymeplease',
     tagReport: 'spymepleasereport',
     pingDuration: 12000
   },

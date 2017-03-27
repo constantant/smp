@@ -9,10 +9,11 @@ import { rootRoutes } from './routers';
 import { AppComponent } from './app.component';
 import { AuthComponent } from './auth/auth.component';
 import { SectionNopageComponent } from './section-nopage/section-nopage.component';
-import { RouterModule } from "@angular/router";
+import { RouteReuseStrategy, RouterModule } from "@angular/router";
 import { SectionPostsComponent } from './section-posts/section-posts.component';
 import { SnippetRequestComponent } from './section-posts/snippet-request/snippet-request.component';
 import { SnippetReportComponent } from './section-posts/snippet-report/snippet-report.component';
+import { AppReuseStrategy } from "./routers/reuse-strategy";
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { SnippetReportComponent } from './section-posts/snippet-report/snippet-r
     UserService,
     DbService,
     AppService,
-    PostService
+    PostService,
+    { provide: RouteReuseStrategy, useClass: AppReuseStrategy }
   ],
   bootstrap: [ AppComponent ]
 })

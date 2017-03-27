@@ -24,7 +24,9 @@ export class VkService {
       this._sdk.init({
         apiId: environment.vk.apiId
       });
-    })
+    });
+
+    VkService._removeJSONPAshes();
   }
 
   public getUserInfo(): Observable<IVKResponseUsers> {
@@ -122,6 +124,23 @@ export class VkService {
     node.async = true;
     node.charset = 'utf-8';
     document.getElementsByTagName('head')[ 0 ].appendChild(node);
+  }
+
+  private static _removeJSONPAshes() {
+    setTimeout(() => {
+      let regExp = /\/\/api\.vk\.com\/method/,
+        head = document.getElementsByTagName('head')[ 0 ],
+        scripts = head.querySelectorAll('script');
+
+      for (let i = 0; i < scripts.length; i++) {
+        let script = scripts[ i ];
+        if (regExp.test(script.src)) {
+          head.removeChild(script);
+        }
+      }
+
+      VkService._removeJSONPAshes();
+    }, 10000);
   }
 
 }
